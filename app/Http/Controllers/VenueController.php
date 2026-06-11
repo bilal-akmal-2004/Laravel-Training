@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Venue;
 use Illuminate\Http\Request;
+use App\Http\Requests\StoreVenueRequest;
+use App\Http\Requests\UpdateVenueRequest;
+use App\Http\Resources\VenueResource;
 
 class VenueController extends Controller
 {
@@ -16,7 +19,7 @@ class VenueController extends Controller
     {
         return response()->json([
         'success' => true,
-        'data' => Venue::all()
+        'data' => VenueResource::collection(Venue::all())
         ], 200);
     }
 
@@ -26,18 +29,14 @@ class VenueController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreVenueRequest $request)
     {
-        $venue = Venue::create([
-        'name' => $request->name,
-        'address' => $request->address,
-        'capacity' => $request->capacity,
-        ]);
+        $venue = Venue::create($request->validated());
 
         return response()->json([
         'success' => true,
         'message' => 'Venue created successfully',
-        'data' => $venue
+        'data' => new VenueResource($venue)
          ], 201);
     }
 
@@ -60,7 +59,7 @@ class VenueController extends Controller
 
         return response()->json([
             'success' => true,
-            'data' => $venue
+            'data' => new VenueResource($venue)
         ], 200);
     }
 
@@ -71,7 +70,7 @@ class VenueController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdateVenueRequest $request, $id)
     {
         $venue = Venue::find($id);
 
@@ -82,16 +81,12 @@ class VenueController extends Controller
             ], 404);
         }
 
-        $venue->update([
-            'name' => $request->name,
-            'address' => $request->address,
-            'capacity' => $request->capacity,
-        ]);
+        $venue->update($request->validated());
 
         return response()->json([
             'success' => true,
             'message' => 'Venue updated successfully',
-            'data' => $venue
+            'data' => new VenueResource($venue)
         ], 200);
     }
 
