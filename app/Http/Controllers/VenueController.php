@@ -3,24 +3,30 @@
 namespace App\Http\Controllers;
 
 use App\Models\Venue;
-use Illuminate\Http\Request;
 use App\Http\Requests\StoreVenueRequest;
 use App\Http\Requests\UpdateVenueRequest;
 use App\Http\Resources\VenueResource;
+use App\Contracts\VenueServiceContract;
+use App\Http\Requests\IndexVenueRequest;
 
 class VenueController extends Controller
 {
+    private $venueService;
+
+    public function __construct(VenueServiceContract $venueService)
+    {
+        $this->venueService = $venueService;
+    }
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(IndexVenueRequest $request)
     {
-        return response()->json([
-        'success' => true,
-        'data' => VenueResource::collection(Venue::all())
-        ], 200);
+        return VenueResource::collection($this->venueService->paginate(
+            $request->input('per_page',20)
+        ))->response();
     }
 
     /**
@@ -31,13 +37,9 @@ class VenueController extends Controller
      */
     public function store(StoreVenueRequest $request)
     {
-        $venue = Venue::create($request->validated());
+        $venue = $this->venueService->create($request->validated());
 
-        return response()->json([
-        'success' => true,
-        'message' => 'Venue created successfully',
-        'data' => new VenueResource($venue)
-         ], 201);
+        return (new VenueResource($venue))->response()->setStatusCode(201);
     }
 
     /**
@@ -46,21 +48,9 @@ class VenueController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Venue $venue)
     {
-        $venue = Venue::find($id);
-
-        if(!$venue){
-            return response()->json([
-                'success' => false,
-                'message' => 'Venue not found'
-            ], 404);
-        }
-
-        return response()->json([
-            'success' => true,
-            'data' => new VenueResource($venue)
-        ], 200);
+        return (new VenueResource($venue))->response();
     }
 
     /**
@@ -70,24 +60,14 @@ class VenueController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateVenueRequest $request, $id)
+    public function update(UpdateVenueRequest $request, Venue $venue)
     {
-        $venue = Venue::find($id);
+        $venue = $this->venueService->update(
+            $venue,
+            $request->validated()
+        );
 
-        if(!$venue){
-            return response()->json([
-              'success' => false,
-              'message' => 'Venue not found'
-            ], 404);
-        }
-
-        $venue->update($request->validated());
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Venue updated successfully',
-            'data' => new VenueResource($venue)
-        ], 200);
+        return (new VenueResource($venue))->response();
     }
 
     /**
@@ -96,22 +76,12 @@ class VenueController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Venue $venue)
     {
-        $venue = Venue::find($id);
-
-        if(!$venue){
-            return response()->json([
-                'success' => false,
-                'message' => 'Venue not found'
-            ], 404);
-        }
-
-        $venue->delete();
+        $this->venueService->delete($venue);
 
         return response()->json([
-            'success' => true,
             'message' => 'Venue deleted successfully'
-        ], 200);
+        ]);
     }
 }

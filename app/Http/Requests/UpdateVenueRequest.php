@@ -26,7 +26,7 @@ class UpdateVenueRequest extends FormRequest
         return [
             'name' => 'sometimes|required|string|max:255',
             'address' => 'sometimes|required|string|max:255',
-            'capacity' => 'sometimes|required|integer|min:1'
+            'capacity' => 'sometimes|required|integer|min:1|max:1000'
         ];
     }
 }
