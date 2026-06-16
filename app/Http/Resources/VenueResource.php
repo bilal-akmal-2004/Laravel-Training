@@ -19,6 +19,6 @@ class VenueResource extends JsonResource
         'name' => $this->name,
         'address' => $this->address,
         'capacity' => $this->capacity,
-    ];
+        ];
     }
 }
