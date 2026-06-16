@@ -11,12 +11,9 @@ use App\Http\Requests\IndexVenueRequest;
 
 class VenueController extends Controller
 {
-    private $venueService;
-
-    public function __construct(VenueServiceContract $venueService)
-    {
-        $this->venueService = $venueService;
-    }
+    public function __construct(
+    private VenueServiceContract $venueService
+) {}
     /**
      * Display a listing of the resource.
      *

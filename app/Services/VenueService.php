@@ -17,11 +17,6 @@ class VenueService implements VenueServiceContract
         return Venue::create($data);
     }
 
-    public function findById(int $id)
-    {
-        return Venue::find($id);
-    }
-
     public function update(Venue $venue, array $data)
     {
         $venue->update($data);

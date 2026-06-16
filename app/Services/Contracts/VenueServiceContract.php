@@ -10,8 +10,6 @@ interface VenueServiceContract
 
     public function create(array $data);
 
-    public function findById(int $id);
-
     public function update(Venue $venue, array $data);
 
     public function delete(Venue $venue);
