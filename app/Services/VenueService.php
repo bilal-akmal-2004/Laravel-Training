@@ -3,7 +3,7 @@
 namespace App\Services;
 
 use App\Models\Venue;
-use App\Contracts\VenueServiceContract;
+use App\Services\Contracts\VenueServiceContract;
 
 class VenueService implements VenueServiceContract
 {
@@ -15,11 +15,6 @@ class VenueService implements VenueServiceContract
     public function create(array $data)
     {
         return Venue::create($data);
-    }
-
-    public function findById(int $id)
-    {
-        return Venue::find($id);
     }
 
     public function update(Venue $venue, array $data)
