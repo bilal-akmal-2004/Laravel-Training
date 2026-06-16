@@ -3,7 +3,7 @@
 namespace App\Services;
 
 use App\Models\Venue;
-use App\Contracts\VenueServiceContract;
+use App\Services\Contracts\VenueServiceContract;
 
 class VenueService implements VenueServiceContract
 {

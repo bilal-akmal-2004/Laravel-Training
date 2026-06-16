@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Contracts;
+namespace App\Services\Contracts;
 
 use App\Models\Venue;
 

@@ -6,7 +6,7 @@ use App\Models\Venue;
 use App\Http\Requests\StoreVenueRequest;
 use App\Http\Requests\UpdateVenueRequest;
 use App\Http\Resources\VenueResource;
-use App\Contracts\VenueServiceContract;
+use App\Services\Contracts\VenueServiceContract;
 use App\Http\Requests\IndexVenueRequest;
 
 class VenueController extends Controller
